@@ -3,6 +3,17 @@
 # even when using the -stock profiles.  Therefore, testnode package
 # installation hasn't happened yet so we install zap dependencies here.
 
+- name: ceph-devstack cleanup
+  shell: |
+    wipefs --force -a /dev/vdd
+    dd if=/dev/zero of=/dev/vdd  bs=1M count=100
+    sudo pvremove --force /dev/vdd
+  ignore_errors: true
+
+- name: ceph-devstack cleanup
+  shell: sudo umount /var/lib/ceph && sudo dmsetup remove /dev/mapper/vg_hdd-lv_5
+  ignore_errors: true
+
 - name: Make sure apt dependencies are installed
   apt:
     name: ['gdisk', 'dmsetup']
